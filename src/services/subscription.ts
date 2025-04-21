@@ -1,11 +1,8 @@
-// Логика подписок на напоминания о старте контестов
+// Логика подписок на напоминания о старте соревнований
 
-// В памяти: Map<contestId, Set<chatId>>
-const subscriptions: Map<string, Set<number>> = new Map();
+const subscriptions = new Map<string, Set<number>>();
 
-/**
- * Подписывает пользователя (chatId) на напоминания о контесте
- */
+/** Подписать пользователя (chatId) на напоминания о соревновании */
 export function subscribe(chatId: number, contestId: string): void {
     if (!subscriptions.has(contestId)) {
         subscriptions.set(contestId, new Set());
@@ -13,23 +10,17 @@ export function subscribe(chatId: number, contestId: string): void {
     subscriptions.get(contestId)!.add(chatId);
 }
 
-/**
- * Отписывает пользователя от напоминаний
- */
+/** Отписать пользователя от напоминаний */
 export function unsubscribe(chatId: number, contestId: string): void {
     subscriptions.get(contestId)?.delete(chatId);
 }
 
-/**
- * Возвращает список chatId, подписанных на данный контест
- */
+/** Список chatId, подписанных на соревнование */
 export function getSubscribers(contestId: string): number[] {
-    return Array.from(subscriptions.get(contestId) || []);
+    return Array.from(subscriptions.get(contestId) ?? []);
 }
 
-/**
- * Все подписки: Map<contestId, chatId[]>
- */
+/** Все подписки: { [contestId]: chatId[] } */
 export function getAllSubscriptions(): Record<string, number[]> {
     const result: Record<string, number[]> = {};
     subscriptions.forEach((set, contestId) => {

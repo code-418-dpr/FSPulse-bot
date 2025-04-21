@@ -16,9 +16,15 @@ function format(level: LogLevel, msg: string): string {
 }
 
 export const logger = {
-    info: (msg: string) => console.log(format(LogLevel.INFO, msg)),
-    warn: (msg: string) => console.warn(format(LogLevel.WARN, msg)),
-    error: (msg: string) => console.error(format(LogLevel.ERROR, msg)),
+    info: (msg: string) => {
+        console.log(format(LogLevel.INFO, msg));
+    },
+    warn: (msg: string) => {
+        console.warn(format(LogLevel.WARN, msg));
+    },
+    error: (msg: string) => {
+        console.error(format(LogLevel.ERROR, msg));
+    },
     debug: (msg: string) => {
         // DEBUG-логи выводятся только в режиме разработки
         if (process.env.NODE_ENV === "development") {

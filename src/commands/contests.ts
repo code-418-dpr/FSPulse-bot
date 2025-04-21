@@ -10,7 +10,7 @@ export function registerContestsCommand(bot: Bot) {
         try {
             const contests: Contest[] = await fetchUpcomingContests();
             if (contests.length === 0) {
-                return ctx.reply("🥲 Нет предстоящих соревнований.");
+                return await ctx.reply("🥲 Нет предстоящих соревнований.");
             }
 
             let message = "📅 *Ближайшие соревнования:*\n\n";
@@ -18,11 +18,12 @@ export function registerContestsCommand(bot: Bot) {
                 message += `*ID:* \`${c.id}\`\n` + `*${c.title}*\n` + `🕒 ${c.startTime.toLocaleString()}\n\n`;
             }
             message += "Чтобы подписаться на напоминания, отправьте:\n`/subscribe <ID>`";
+
             await ctx.reply(message, { parse_mode: "Markdown" });
             logger.debug(`Отправлено ${contests.length} соревнований пользователю ${ctx.chat.id}`);
-        } catch (err) {
-            logger.error(`Ошибка при обработке /contests: ${err}`);
-            ctx.reply("❌ Не удалось получить список соревнований. Попробуйте позже.");
+        } catch (err: unknown) {
+            logger.error(`Ошибка при обработке /contests: ${String(err)}`);
+            await ctx.reply("❌ Не удалось получить список соревнований. Попробуйте позже.");
         }
     });
 }
