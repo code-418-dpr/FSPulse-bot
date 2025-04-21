@@ -4,7 +4,7 @@
 [![release](https://img.shields.io/github/v/release/code-418-dpr/FSPulse-bot?include_prereleases)](https://github.com/code-418-dpr/FSPulse-bot/releases)
 [![downloads](https://img.shields.io/github/downloads/code-418-dpr/FSPulse-bot/total)](https://github.com/code-418-dpr/FSPulse-bot/releases)
 [![repo size](https://img.shields.io/github/repo-size/code-418-dpr/FSPulse-bot)](https://github.com/code-418-dpr/FSPulse-bot)
-[![last commit](https://img.shields.io/github/last-commit/code-418-dpr/FSPulse-bot)](https://github.com/code-418-dpr/FSPulse-bot/commits/main)
+[![last commit](https://img.shields.io/github/last-commit/code-418-dpr/FSPulse-bot/main)](https://github.com/code-418-dpr/FSPulse-bot/commits/main)
 [![build](https://github.com/code-418-dpr/FSPulse-bot/actions/workflows/build.yaml/badge.svg)](https://github.com/code-418-dpr/FSPulse-bot/actions/workflows/build.yaml)
 [![linters](https://github.com/code-418-dpr/FSPulse-bot/actions/workflows/linters.yaml/badge.svg)](https://github.com/code-418-dpr/FSPulse-bot/actions/workflows/linters.yaml)
 [![codeql](https://github.com/code-418-dpr/FSPulse-bot/actions/workflows/codeql.yaml/badge.svg)](https://github.com/code-418-dpr/FSPulse-bot/actions/workflows/codeql.yaml)
