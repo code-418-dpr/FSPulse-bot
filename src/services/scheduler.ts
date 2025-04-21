@@ -1,15 +1,16 @@
 // src/services/scheduler.ts
-import { Bot } from 'grammy';
-import cron from 'node-cron';
-import { fetchUpcomingContests } from './api';
-import type { Contest } from './api';
-import { getSubscribers } from './subscription';
-import { SCHEDULER_CRON, REMINDER_MS } from '../config';
+import { Bot } from "grammy";
+import cron from "node-cron";
+
+import { REMINDER_MS, SCHEDULER_CRON } from "../config";
+import { fetchUpcomingContests } from "./api";
+import type { Contest } from "./api";
+import { getSubscribers } from "./subscription";
 
 interface Reminder {
     contestId: string;
     title: string;
-    when: '24h' | '1h';
+    when: "24h" | "1h";
     timeToFire: Date;
 }
 
@@ -32,10 +33,10 @@ export function initScheduler(bot: Bot): void {
 
             // проверяем «окно» ±5 минут вокруг 24h и 1h
             if (Math.abs(diff - REMINDER_MS.DAY) <= 5 * 60 * 1000) {
-                reminders.push({ contestId: c.id, title: c.title, when: '24h', timeToFire: c.startTime });
+                reminders.push({ contestId: c.id, title: c.title, when: "24h", timeToFire: c.startTime });
             }
             if (Math.abs(diff - REMINDER_MS.HOUR) <= 5 * 60 * 1000) {
-                reminders.push({ contestId: c.id, title: c.title, when: '1h', timeToFire: c.startTime });
+                reminders.push({ contestId: c.id, title: c.title, when: "1h", timeToFire: c.startTime });
             }
         }
 
@@ -45,7 +46,7 @@ export function initScheduler(bot: Bot): void {
 
             const subs = getSubscribers(r.contestId);
             const message =
-                r.when === '24h'
+                r.when === "24h"
                     ? `🔔 Напоминание: соревнование «${r.title}» стартует через 24 часа!`
                     : `⏰ Напоминание: соревнование «${r.title}» стартует через 1 час!`;
 

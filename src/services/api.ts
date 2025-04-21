@@ -1,5 +1,6 @@
 // src/services/api.ts
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
+
 dotenv.config();
 
 export interface Contest {
@@ -10,8 +11,8 @@ export interface Contest {
 }
 
 // Базовый URL вашего API и токен авторизации
-const API_BASE_URL = process.env.API_BASE_URL ?? 'http://localhost:3000';
-const API_TOKEN = process.env.API_TOKEN ?? '';
+const API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:3000";
+const API_TOKEN = process.env.API_TOKEN ?? "";
 
 /**
  * Заглушка: возвращает список предстоящих контестов.
@@ -29,13 +30,13 @@ export async function fetchUpcomingContests(): Promise<Contest[]> {
     // Пока возвращаем мок:
     return [
         {
-            id: '1',
-            title: 'Algorithm Open',
+            id: "1",
+            title: "Algorithm Open",
             startTime: new Date(Date.now() + 25 * 60 * 60 * 1000),
         },
         {
-            id: '2',
-            title: 'Graph Challenge',
+            id: "2",
+            title: "Graph Challenge",
             startTime: new Date(Date.now() + 2 * 60 * 60 * 1000),
         },
     ];

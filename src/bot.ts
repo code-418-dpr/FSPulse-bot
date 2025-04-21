@@ -1,15 +1,16 @@
 // src/bot.ts
-import { Bot } from 'grammy';
-import { BOT_TOKEN } from './config';
-import { registerStartCommand } from './commands/start';
-import { registerContestsCommand } from './commands/contests';
-import { registerSubscribeCommand } from './commands/subscribe';
-import { initScheduler } from './services/scheduler';
-import { logger } from './utils/logger';
+import { Bot } from "grammy";
+
+import { registerContestsCommand } from "./commands/contests";
+import { registerStartCommand } from "./commands/start";
+import { registerSubscribeCommand } from "./commands/subscribe";
+import { BOT_TOKEN } from "./config";
+import { initScheduler } from "./services/scheduler";
+import { logger } from "./utils/logger";
 
 async function main() {
     // Логируем сразу при старте процесса
-    logger.info('🔄 Запускаем бот ФСП...');
+    logger.info("🔄 Запускаем бот ФСП...");
 
     const bot = new Bot(BOT_TOKEN);
 
@@ -34,7 +35,7 @@ async function main() {
     await bot.start();
 }
 
-main().catch(err => {
+main().catch((err) => {
     logger.error(`❌ Ошибка в main(): ${err}`);
     process.exit(1);
 });
