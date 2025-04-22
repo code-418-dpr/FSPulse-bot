@@ -1,12 +1,13 @@
 import { Bot, GrammyError, HttpError } from "grammy";
 
+import { registerContestsCallback } from "@/commands/contests-callback";
+
 import { contestsCommand } from "./commands/contests";
 import { startCommand } from "./commands/start";
 import { subscribeCommand } from "./commands/subscribe";
 import { BOT_TOKEN } from "./config";
+import { initScheduler } from "./services/scheduler";
 import { logger } from "./utils/logger";
-
-// import { initScheduler } from "./services/scheduler";
 
 async function main() {
     logger.info("🔄 Запускаем бот ФСП...");
@@ -18,8 +19,10 @@ async function main() {
     bot.command("contests", contestsCommand);
     bot.command("subscribe", subscribeCommand);
 
+    registerContestsCallback(bot);
+
     // Планировщик
-    // initScheduler(bot);
+    initScheduler(bot);
 
     // Глобальный обработчик ошибок
     bot.catch((err) => {
