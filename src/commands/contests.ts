@@ -1,29 +1,34 @@
-import { Bot } from "grammy";
+import { Context } from "grammy";
 
 import { fetchUpcomingContests } from "../services/api";
-import type { Contest } from "../services/api";
 import { logger } from "../utils/logger";
 
-export function registerContestsCommand(bot: Bot) {
-    bot.command("contests", async (ctx) => {
-        logger.info(`ℹ️ Получен /contests от chatId=${ctx.chat.id}`);
-        try {
-            const contests: Contest[] = await fetchUpcomingContests();
-            if (contests.length === 0) {
-                return await ctx.reply("🥲 Нет предстоящих соревнований.");
-            }
+export async function contestsCommand(ctx: Context) {
+    logger.info(`/contests от chatId=${ctx.chat?.id}`);
 
-            let message = "📅 *Ближайшие соревнования:*\n\n";
-            for (const c of contests) {
-                message += `*ID:* \`${c.id}\`\n` + `*${c.title}*\n` + `🕒 ${c.startTime.toLocaleString()}\n\n`;
-            }
-            message += "Чтобы подписаться на напоминания, отправьте:\n`/subscribe <ID>`";
+    try {
+        const contests = await fetchUpcomingContests();
 
-            await ctx.reply(message, { parse_mode: "Markdown" });
-            logger.debug(`Отправлено ${contests.length} соревнований пользователю ${ctx.chat.id}`);
-        } catch (err: unknown) {
-            logger.error(`Ошибка при обработке /contests: ${String(err)}`);
-            await ctx.reply("❌ Не удалось получить список соревнований. Попробуйте позже.");
+        if (contests.length === 0) {
+            return await ctx.reply("🥲 Нет предстоящих соревнований.");
         }
-    });
+
+        const messageLines = ["📅 *Ближайшие соревнования:*\n"];
+        for (const contest of contests) {
+            messageLines.push(
+                `*ID:* \`${contest.id}\``,
+                `*${contest.title}*`,
+                `🕒 ${new Date(contest.startTime).toLocaleString()}`,
+                "",
+            );
+        }
+
+        messageLines.push("Чтобы подписаться, отправьте:\n`/subscribe <ID>`");
+
+        await ctx.reply(messageLines.join("\n"), { parse_mode: "Markdown" });
+        logger.debug(`✅ Отправлено ${contests.length} соревнований пользователю ${ctx.chat?.id}`);
+    } catch (err) {
+        logger.error(`❌ Ошибка в /contests: ${String(err)}`);
+        await ctx.reply("❌ Не удалось получить список. Попробуйте позже.");
+    }
 }

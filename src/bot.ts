@@ -1,28 +1,52 @@
-import { Bot } from "grammy";
+import { Bot, GrammyError, HttpError } from "grammy";
 
-import { registerContestsCommand } from "./commands/contests";
-import { registerStartCommand } from "./commands/start";
-import { registerSubscribeCommand } from "./commands/subscribe";
+import { contestsCommand } from "./commands/contests";
+import { startCommand } from "./commands/start";
+import { subscribeCommand } from "./commands/subscribe";
 import { BOT_TOKEN } from "./config";
-import { initScheduler } from "./services/scheduler";
 import { logger } from "./utils/logger";
+
+// import { initScheduler } from "./services/scheduler";
 
 async function main() {
     logger.info("🔄 Запускаем бот ФСП...");
 
     const bot = new Bot(BOT_TOKEN);
 
-    registerStartCommand(bot);
-    registerContestsCommand(bot);
-    registerSubscribeCommand(bot);
+    // Команды
+    bot.command("start", startCommand);
+    bot.command("contests", contestsCommand);
+    bot.command("subscribe", subscribeCommand);
 
-    initScheduler(bot);
+    // Планировщик
+    // initScheduler(bot);
+
+    // Глобальный обработчик ошибок
+    bot.catch((err) => {
+        const ctx = err.ctx;
+        logger.error(`❌ Ошибка при обработке обновления ${ctx.update.update_id}:`);
+        const e = err.error;
+
+        if (e instanceof GrammyError) {
+            logger.error(`Ошибка Telegram API: ${e.description}`);
+        } else if (e instanceof HttpError) {
+            logger.error(`Ошибка HTTP запроса к Telegram: ${e.message}`);
+        } else if (e instanceof Error) {
+            logger.error(`Неизвестная ошибка: ${e.message}`);
+        } else {
+            logger.error("Неизвестная ошибка неизвестного типа:", e);
+        }
+    });
 
     try {
         const me = await bot.api.getMe();
         logger.info(`✅ Бот успешно запущен как @${me.username} (id=${me.id})`);
-    } catch (err: unknown) {
-        logger.error(`❌ Не удалось получить информацию о боте: ${String(err)}`);
+    } catch (err) {
+        if (err instanceof Error) {
+            logger.error(`❌ Не удалось получить информацию о боте: ${err.message}`);
+        } else {
+            logger.error("❌ Не удалось получить информацию о боте: неизвестная ошибка", err);
+        }
         process.exit(1);
     }
 
@@ -30,6 +54,10 @@ async function main() {
 }
 
 main().catch((err: unknown) => {
-    logger.error(`❌ Ошибка в main(): ${String(err)}`);
+    if (err instanceof Error) {
+        logger.error(`❌ Ошибка запуска в main(): ${err.message}`);
+    } else {
+        logger.error("❌ Ошибка запуска в main(): неизвестная ошибка", err);
+    }
     process.exit(1);
 });
